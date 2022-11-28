@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <title>Video Chat</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <style>
+      .hidden {
+          display: none;
+      }
         .hidden {
             display: none;
         }
@@ -23,342 +29,358 @@
             background-color: #000;
         }
 
-        #local-video {
-            background: #000;
-            height: 250px;
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 350px;
-            margin: 16px;
-            border: 2px solid #fff;
-        }
+      .live {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          width: 100%;
+          height: 100%;
+          background-color: #000;
+      }
 
-        #remote-video {
-            position: absolute;
-            max-width: 100%;
-            height: 100%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+      #local-video {
+          background: #000;
+          height: 250px;
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 350px;
+          margin: 16px;
+          border: 2px solid #fff;
+      }
 
-        .button.end_call {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            padding: 8px;
-            background-color: red;
-            color: white;
-            border: none;
-            margin: 16px;
-        }
+      #remote-video {
+          position: absolute;
+          max-width: 100%;
+          height: 100%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+      }
 
-        .button.open_chat {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 15px;
-            background-color: blue;
-            color: white;
-            border-radius: 100%;
-            margin: 16px;
-            border: none;
-        }
+      .button.end_call {
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          padding: 8px;
+          background-color: red;
+          color: white;
+          border: none;
+          margin: 16px;
+      }
 
-        .button.open_chat>i {
-            font-size: 25px;
-        }
+      .button.open_chat {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          padding: 15px;
+          background-color: blue;
+          color: white;
+          border-radius: 100%;
+          margin: 16px;
+          border: none;
+      }
 
-        .chat {
-            background: #fff;
-            width: 400px;
-            height: 100%;
-            position: absolute;
-            border: none;
-        }
+      .button.open_chat>i {
+          font-size: 25px;
+      }
 
-        .chat_title {
-            margin: 10px;
-            padding-left: 10px;
-            border-bottom: 1px solid #000;
-        }
+      .chat {
+          background: #fff;
+          width: 400px;
+          height: 100%;
+          position: absolute;
+          border: none;
+      }
 
-        .chat_title>h1 {
-            font-family: montserrat-black;
-        }
+      .chat_title {
+          margin: 10px;
+          padding-left: 10px;
+          border-bottom: 1px solid #000;
+      }
 
-        .messages {
-            height: calc(100% - 180px);
-            overflow-y: scroll;
-        }
+      .chat_title>h1 {
+          font-family: montserrat-black;
+      }
 
-        .send {
-            height: 80px;
-            width: 400px;
-            position: fixed;
-            bottom: 0;
-        }
+      .messages {
+          height: calc(100% - 180px);
+          overflow-y: scroll;
+      }
 
-        .input.chat_message {
-            margin-left: 100px;
-            margin-top: 20px;
-        }
+      .send {
+          height: 80px;
+          width: 400px;
+          position: fixed;
+          bottom: 0;
+      }
+
+      .input.chat_message {
+          margin-left: 100px;
+          margin-top: 20px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="menu">
-        <p>Your ID:</p>
-        <p id="uuid"></p>
-        <input type="text" placeholder="Peer id">
-        <br><br>
-        <input type="text" placeholder="Name" id="name">
-        <br><br>
-        <button onclick="callUser()">Connect</button>
+      <p>Your ID:</p>
+      <p id="uuid"></p>
+      <input type="text" placeholder="Peer id" />
+      <br /><br />
+      <input type="text" placeholder="Name" id="name" />
+      <br /><br />
+      <button onclick="callUser()">Connect</button>
     </div>
     <div class="live hidden">
-        <video id="remote-video"></video>
-        <video id="local-video" muted="true"></video>
-        <button class="button end_call" onclick="endCall()">End Call</button>
-        <button class="button open_chat">
-            <i class="fa-solid fa-message"></i>
-        </button>
-        <div class="chat hidden">
-            <div class="chat_title">
-                <h1>Chat</h1>
-            </div>
-            <div class="messages"></div>
-            <div class="send">
-                <form class="chat_form">
-                    <input type="text" class="input chat_message" placeholder="Chat Message" />
-                </form>
-            </div>
+      <video id="remote-video"></video>
+      <video id="local-video" muted="true"></video>
+      <button class="button end_call" onclick="endCall()">End Call</button>
+      <button class="button open_chat">
+        <i class="fa-solid fa-message"></i>
+      </button>
+      <div class="chat hidden">
+        <div class="chat_title">
+          <h1>Chat</h1>
         </div>
+        <div class="messages"></div>
+        <div class="send">
+          <form class="chat_form">
+            <input
+              type="text"
+              class="input chat_message"
+              placeholder="Chat Message"
+            />
+          </form>
+        </div>
+      </div>
     </div>
     <script>
-        const prefix = 'example_p2p_prefix-';
+      const prefix = "example_p2p_prefix-";
 
-        const random = Math.floor(Math.random() * 1000);
-        const peer = new Peer(prefix + random);
-        const chatBtn = document.querySelector('.button.open_chat');
-        const chat = document.querySelector('.chat');
-        
-        async function notify(callerName) {
-            await Notification.requestPermission();
-            const notification = new Notification('RetroNetwork Video Confrencing', {
-                dir: "auto",
-                lang: "",
-                badge: "https://f9928793-06ce-4c41-ad0a-5558a1cd061a-4606328.codehs.me/assets/pages/vc",
-                body: `Click here to answer call from ${callerName}`,
-                tag: "RetroNetwork Video Confrencing",
-                icon: "https://codehs.com/uploads/142208791d6699c74dfea636fced3e1d",
-                image: "",
-                requireInteraction:"on"
-            });
-            notification.addEventListener('click', function(){
-                window.focus();
-                notification.close();
-            });
-        }
+      const random = Math.floor(Math.random() * 1000);
+      const peer = new Peer(prefix + random);
+      const chatBtn = document.querySelector(".button.open_chat");
+      const chat = document.querySelector(".chat");
 
-        var conn;
-        var call;
-
-        peer.on('open', function (id) {
-            console.log(id);
+      async function notify(callerName) {
+        await Notification.requestPermission();
+        const notification = new Notification(
+          "RetroNetwork Video Confrencing",
+          {
+            dir: "auto",
+            lang: "",
+            badge:
+              "https://f9928793-06ce-4c41-ad0a-5558a1cd061a-4606328.codehs.me/assets/pages/vc",
+            body: `Click here to answer call from ${callerName}`,
+            tag: "RetroNetwork Video Confrencing",
+            icon: "https://codehs.com/uploads/142208791d6699c74dfea636fced3e1d",
+            image: "",
+            requireInteraction: "on",
+          }
+        );
+        notification.addEventListener("click", function () {
+          window.focus();
+          notification.close();
         });
+      }
 
-        peer.on('open', function (id) {
-            document.getElementById('uuid').textContent = random;
-        });
+      var conn;
+      var call;
 
-        async function callUser() {
-            // get the id entered by the user
-            const peerId = prefix + document.querySelector('input').value;
-            // grab the camera and mic
-            let stream = await navigator.mediaDevices.getDisplayMedia/*getUserMedia*/({
-                video: true /*{
-                    cursor: 'always',
-                    height: 1000,
-                    width: 1200
-                }*/,
-                audio: true,
-            });
-            // switch to the video call and play the camera preview
-            document.getElementById('menu').classList.add('hidden');
-            document.querySelector('.live').classList.remove('hidden');
-            document.getElementById('local-video').srcObject = stream;
-            document.getElementById('local-video').play();
-            // make the call
-            call = peer.call(peerId, stream);
+      let stream;
 
-            conn = peer.connect(peerId);
-            conn.on('open', function () {
-                conn.send({
-                    type: 'call',
-                    name: document.querySelector('#name').value
-                })
-                conn.on('data', function (data) {
-                    if (data.type === 'message') {
-                        var message = document.createElement('div');
-                        message.innerHTML = `<strong>${data.author}</strong> ${data.message}`;
-                        message.classList = 'message';
-                        messages.appendChild(message);
-                    } else if (data.type === 'call') {
-                        notify(data.name)
-                    }
-                });
+      peer.on("open", function (id) {
+        console.log(id);
+      });
 
-                const messages = document.querySelector('.messages');
-                const chatInput = document.querySelector('.input.chat_message');
-                const chatForm = document.querySelector('.chat_form');
+      peer.on("open", function (id) {
+        document.getElementById("uuid").textContent = random;
+      });
 
-                messages.innerHTML = '';
-                chatBtn.classList.remove('hidden');
-                chat.classList.add('hidden');
+      async function callUser() {
+        // get the id entered by the user
+        const peerId = prefix + document.querySelector("input").value;
+        // grab the camera and mic
+        stream = await navigator.mediaDevices.getDisplayMedia/*getUserMedia*/ ({
+            video: true,
+            audio: true,
+          }
+        );
+        // switch to the video call and play the camera preview
+        document.getElementById("menu").classList.add("hidden");
+        document.querySelector(".live").classList.remove("hidden");
+        document.getElementById("local-video").srcObject = stream;
+        document.getElementById("local-video").play();
+        // make the call
+        call = peer.call(peerId, stream);
 
-                chatForm.addEventListener('submit', (event) => {
-                    if (chatInput.value) {
-                        conn.send({
-                            message: chatInput.value,
-                            author: document.querySelector('#name').value,
-                            type: 'message'
-                        });
-                        var message = document.createElement('div');
-                        message.innerHTML = `<strong>You</strong> ${chatInput.value}`;
-                        message.classList = 'message';
-                        messages.appendChild(message);
-
-                        chatInput.value = '';
-                    }
-                    event.preventDefault();
-                });
-            });
-
-            conn.on('close', function () {
-                document.querySelector('#menu').classList.remove('hidden');
-                document.querySelector('.live').classList.add('hidden');
-            });
-
-            call.on('stream', (stream) => {
-                document.getElementById('remote-video').srcObject = stream;
-                document.getElementById('remote-video').play();
-            });
-            call.on('data', (stream) => {
-                document.querySelector('#remote-video').srcObject = stream;
-            });
-            call.on('error', (err) => {
-                console.log(err);
-            });
-            currentCall = call;
-            // save the destroyed function
-        }
-
-        peer.on('call', (call) => onCall(call))
-        
-        setInterval(() => {
-            if (peer.disconnected === true) {
-                console.log('ok')
-                peer.connect(prefix + document.querySelector('input').value);
+        conn = peer.connect(peerId);
+        conn.on("open", function () {
+          conn.send({
+            type: "call",
+            name: document.querySelector("#name").value,
+          });
+          conn.on("data", function (data) {
+            if (data.type === "message") {
+              var message = document.createElement("div");
+              message.innerHTML = `<strong>${data.author}</strong> ${data.message}`;
+              message.classList = "message";
+              messages.appendChild(message);
+            } else if (data.type === "call") {
+              notify(data.name);
             }
-        }, 500)
-        
-        async function onCall (call) {
-            if (/*confirm(`Accept call from ${call.peer.replace(prefix, '')}?`)*/ true) {
-                // grab the camera and mic
-                let stream = await navigator.mediaDevices.getDisplayMedia/*getUserMedia*/({
-                    video: true /*{
-                    cursor: 'always',
-                    height: 1000,
-                    width: 1200
-                }*/,
-                    audio: true,
-                });
-                // play the local preview
-                document.querySelector('#local-video').srcObject = stream;
-                document.querySelector('#local-video').play();
-                // answer the call
-                call.answer(stream);
-                // save the destroyed function
-                currentCall = call;
-                // change to the video view
-                document.querySelector('#menu').classList.add('hidden');
-                document.querySelector('.live').classList.remove('hidden');
-                call.on('stream', (remoteStream) => {
-                    // when we receive the remote stream, play it
-                    document.getElementById('remote-video').srcObject = remoteStream;
-                    document.getElementById('remote-video').play();
-                });
-            } else {
-                // user rejected the call, destroyed it
-                peer.destroy();
+          });
+
+          const messages = document.querySelector(".messages");
+          const chatInput = document.querySelector(".input.chat_message");
+          const chatForm = document.querySelector(".chat_form");
+
+          messages.innerHTML = "";
+          chatBtn.classList.remove("hidden");
+          chat.classList.add("hidden");
+
+          chatForm.addEventListener("submit", (event) => {
+            if (chatInput.value) {
+              conn.send({
+                message: chatInput.value,
+                author: document.querySelector("#name").value,
+                type: "message",
+              });
+              var message = document.createElement("div");
+              message.innerHTML = `<strong>You</strong> ${chatInput.value}`;
+              message.classList = "message";
+              messages.appendChild(message);
+
+              chatInput.value = "";
             }
-        }
-
-        peer.on('connection', (conn) => connection(conn));
-
-        chatBtn.addEventListener('click', (event) => {
-            chatBtn.classList.add('hidden');
-            chat.classList.remove('hidden');
+            event.preventDefault();
+          });
         });
 
-        function connection(conn) {
-            conn.on('open', function () {
-                conn.on('data', function (data) {
-                    if (data.type === 'message') {
-                        var message = document.createElement('div');
-                        message.innerHTML = `<strong>${data.author}</strong> ${data.message}`;
-                        message.classList = 'message';
-                        messages.appendChild(message);
-                    } else if (data.type === 'call') {
-                        notify(data.name);
-                    }
-                });
+        conn.on("close", function () {
+          document.querySelector("#menu").classList.remove("hidden");
+          document.querySelector(".live").classList.add("hidden");
+        });
 
-                const messages = document.querySelector('.messages');
-                const chatInput = document.querySelector('.input.chat_message');
-                const chatForm = document.querySelector('.chat_form');
+        call.on("stream", (stream) => {
+          document.getElementById("remote-video").srcObject = stream;
+          document.getElementById("remote-video").play();
+        });
+        call.on("data", (stream) => {
+          document.querySelector("#remote-video").srcObject = stream;
+        });
+        call.on("error", (err) => {
+          console.log(err);
+        });
+        currentCall = call;
+        // save the destroyed function
+      }
 
-                messages.innerHTML = '';
-                chatBtn.classList.remove('hidden');
-                chat.classList.add('hidden');
+      peer.on("call", (call) => onCall(call));
 
-                chatForm.addEventListener('submit', (event) => {
-                    if (chatInput.value) {
-                        conn.send({
-                            message: chatInput.value,
-                            author: document.querySelector('#name').value,
-                            type: 'message'
-                        });
-                        var message = document.createElement('div');
-                        message.innerHTML = `<strong>You</strong> ${chatInput.value}`;
-                        message.classList = 'message';
-                        messages.appendChild(message);
-
-                        chatInput.value = '';
-                    }
-                    event.preventDefault();
-                });
-            });
-
-            conn.on('close', function () {
-                document.querySelector('#menu').classList.remove('hidden');
-                document.querySelector('.live').classList.add('hidden');
-            });
+      setInterval(() => {
+        if (peer.disconnected === true) {
+          console.log("ok");
+          peer.connect(prefix + document.querySelector("input").value);
         }
+      }, 500);
 
-        function endCall() {
-            document.querySelector('#menu').classList.remove('hidden');
-            document.querySelector('.live').classList.add('hidden');
-            conn.close();
-            call.close();
-
-            conn = null;
-            call = null;
+      async function onCall(call) {
+        if (
+          /*confirm(`Accept call from ${call.peer.replace(prefix, '')}?`)*/ true
+        ) {
+          // grab the camera and mic
+          stream = await navigator.mediaDevices.getDisplayMedia/*getUserMedia*/ ({
+              video: true,
+              audio: true,
+            }
+          );
+          // play the local preview
+          document.querySelector("#local-video").srcObject = stream;
+          document.querySelector("#local-video").play();
+          // answer the call
+          call.answer(stream);
+          // save the destroyed function
+          currentCall = call;
+          // change to the video view
+          document.querySelector("#menu").classList.add("hidden");
+          document.querySelector(".live").classList.remove("hidden");
+          call.on("stream", (remoteStream) => {
+            // when we receive the remote stream, play it
+            document.getElementById("remote-video").srcObject = remoteStream;
+            document.getElementById("remote-video").play();
+          });
+        } else {
+          // user rejected the call, destroyed it
+          peer.destroy();
         }
+      }
 
+      peer.on("connection", (conn) => connection(conn));
+
+      chatBtn.addEventListener("click", (event) => {
+        chatBtn.classList.add("hidden");
+        chat.classList.remove("hidden");
+      });
+
+      function connection(conn) {
+        conn.on("open", function () {
+          conn.on("data", function (data) {
+            if (data.type === "message") {
+              var message = document.createElement("div");
+              message.innerHTML = `<strong>${data.author}</strong> ${data.message}`;
+              message.classList = "message";
+              messages.appendChild(message);
+            } else if (data.type === "call") {
+              notify(data.name);
+            }
+          });
+
+          const messages = document.querySelector(".messages");
+          const chatInput = document.querySelector(".input.chat_message");
+          const chatForm = document.querySelector(".chat_form");
+
+          messages.innerHTML = "";
+          chatBtn.classList.remove("hidden");
+          chat.classList.add("hidden");
+
+          chatForm.addEventListener("submit", (event) => {
+            if (chatInput.value) {
+              conn.send({
+                message: chatInput.value,
+                author: document.querySelector("#name").value,
+                type: "message",
+              });
+              var message = document.createElement("div");
+              message.innerHTML = `<strong>You</strong> ${chatInput.value}`;
+              message.classList = "message";
+              messages.appendChild(message);
+
+              chatInput.value = "";
+            }
+            event.preventDefault();
+          });
+        });
+
+        conn.on("close", function () {
+          document.querySelector("#menu").classList.remove("hidden");
+          document.querySelector(".live").classList.add("hidden");
+        });
+      }
+
+      function endCall() {
+        document.querySelector("#menu").classList.remove("hidden");
+        document.querySelector(".live").classList.add("hidden");
+        conn.close();
+        call.close();
+
+        conn = null;
+        call = null;
+        stream = null;
+      }
     </script>
-</body>
-
+  </body>
 </html>
