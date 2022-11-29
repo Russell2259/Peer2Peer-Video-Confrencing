@@ -39,6 +39,12 @@ peer.on('open', function (id) {
     document.getElementById('uuid').textContent = random;
 });
 
+peer.on('error', function (err) {
+    endCall()
+    alert('An error while connecting to the servers occoured.')
+    console.log(err)
+})
+
 async function callUser() {
     // get the id entered by the user
     const peerId = prefix + document.querySelector('input').value;
