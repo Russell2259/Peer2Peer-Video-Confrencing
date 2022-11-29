@@ -57,7 +57,7 @@ async function callUser() {
             console.log(err)
         })
 
-        var connInt = setInterval(() => {
+        //var connInt = setInterval(() => {
             if (conn.peer) {
                 clearInterval(connInt);
                 conn.on('open', function () {
@@ -134,7 +134,7 @@ async function callUser() {
                     console.log(err)
                 });
             }
-        }, 1000)
+        //}, 1000)
     } else {
         alert('You cannot connect to yourself.')
     }
