@@ -50,17 +50,6 @@ async function callUser() {
     const peerId = prefix + document.querySelector('input').value;
     // grab the camera and mic
     if (peerId !== prefix + random) {
-        stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
-            video: true,
-            audio: true,
-        }
-        );
-        // switch to the video call and play the camera preview
-        document.getElementById('local-video').srcObject = stream;
-        document.getElementById('local-video').play();
-        // make the call
-        call = peer.call(peerId, stream);
-
         conn = peer.connect(peerId);
         conn.on('error', function (err) {
             endCall()
@@ -118,6 +107,16 @@ async function callUser() {
             document.querySelector('#menu').classList.remove('hidden');
             document.querySelector('.live').classList.add('hidden');
         });
+
+        stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
+            video: true,
+            audio: true,
+        });
+        // switch to the video call and play the camera preview
+        document.getElementById('local-video').srcObject = stream;
+        document.getElementById('local-video').play();
+        // make the call
+        call = peer.call(peerId, stream);
 
         call.on('stream', (stream) => {
             document.getElementById('remote-video').srcObject = stream;
