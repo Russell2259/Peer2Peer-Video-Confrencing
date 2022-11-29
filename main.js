@@ -39,12 +39,6 @@ peer.on('open', function (id) {
     document.getElementById('uuid').textContent = random;
 });
 
-peer.on('error', function (err) {
-    alert('An error while connecting to the servers occoured.')
-    console.log(err)
-    endCall()
-})
-
 async function callUser() {
     // get the id entered by the user
     const peerId = prefix + document.querySelector('input').value;
@@ -64,6 +58,12 @@ async function callUser() {
         call = peer.call(peerId, stream);
 
         conn = peer.connect(peerId);
+        conn.on('error', function (err) {
+            alert('An error while connecting to the servers occoured.')
+            console.log(err)
+            endCall()
+        })
+
         conn.on('open', function () {
             conn.send({
                 type: 'call',
@@ -121,7 +121,9 @@ async function callUser() {
             document.querySelector('#remote-video').srcObject = stream;
         });
         call.on('error', (err) => {
-            console.log(err);
+            alert('An error while connecting to the servers occoured.')
+            console.log(err)
+            endCall()
         });
         currentCall = call;
         // save the destroyed function
