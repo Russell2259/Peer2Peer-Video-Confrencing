@@ -66,7 +66,7 @@ async function callUser() {
         conn.on("data", function (data) {
             if (data.type === "message") {
                 var message = document.createElement("div");
-                message.innerHTML = `<strong>${data.author}</strong> ${data.message}`;
+                message.innerText = `<strong>${data.author}</strong> ${data.message}`;
                 message.classList = "message";
                 messages.appendChild(message);
             } else if (data.type === "call") {
@@ -90,7 +90,7 @@ async function callUser() {
                     type: "message",
                 });
                 var message = document.createElement("div");
-                message.innerHTML = `<strong>You</strong> ${chatInput.value}`;
+                message.innerText = `<strong>You</strong> ${chatInput.value}`;
                 message.classList = "message";
                 messages.appendChild(message);
 
@@ -171,7 +171,7 @@ function connection(conn) {
         conn.on("data", function (data) {
             if (data.type === "message") {
                 var message = document.createElement("div");
-                message.innerHTML = `<strong>${data.author}</strong> ${data.message}`;
+                message.innerText = `<strong>${data.author}</strong> ${data.message}`;
                 message.classList = "message";
                 messages.appendChild(message);
             } else if (data.type === "call") {
@@ -195,7 +195,7 @@ function connection(conn) {
                     type: "message",
                 });
                 var message = document.createElement("div");
-                message.innerHTML = `<strong>You</strong> ${chatInput.value}`;
+                message.innerText = `<strong>You</strong> ${chatInput.value}`;
                 message.classList = "message";
                 messages.appendChild(message);
 
