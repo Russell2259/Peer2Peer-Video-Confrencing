@@ -45,8 +45,8 @@ async function callUser() {
     // grab the camera and mic
     //if (peerId !== prefix + random) {
         conn = peer.connect(peerId);
-        peer.on('error', function () {
-            alert('an error occoured while connecting to that user.')
+        conn.on('error', function(err) {
+            alert(err);
         })
 
         conn.on('open', function () {
