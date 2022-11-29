@@ -1,5 +1,3 @@
-//temporarily importing eruda for development
-
 //javascript:(function () { var script = document.createElement('script'); script.src="//cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
 
 const prefix = 'example_p2p_prefix-';
@@ -115,7 +113,7 @@ async function callUser() {
                     document.querySelector('.live').classList.add('hidden');
                 });
 
-                stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
+                stream = await navigator.mediaDevices.getDisplayMedia/*getUserMedia*/({
                     video: true,
                     audio: true,
                 });
@@ -158,7 +156,7 @@ async function onCall(call) {
           /*confirm(`Accept call from ${call.peer.replace(prefix, '')}?`)*/ true
     ) {
         // grab the camera and mic
-        stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
+        stream = await navigator.mediaDevices.getDisplayMedia/*getUserMedia*/({
             video: true,
             audio: true,
         }
