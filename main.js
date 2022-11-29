@@ -50,8 +50,6 @@ async function callUser() {
         }
         );
         // switch to the video call and play the camera preview
-        document.getElementById('menu').classList.add('hidden');
-        document.querySelector('.live').classList.remove('hidden');
         document.getElementById('local-video').srcObject = stream;
         document.getElementById('local-video').play();
         // make the call
@@ -59,12 +57,14 @@ async function callUser() {
 
         conn = peer.connect(peerId);
         conn.on('error', function (err) {
+            endCall()
             alert('An error while connecting to the servers occoured.')
             console.log(err)
-            endCall()
         })
 
         conn.on('open', function () {
+            document.getElementById('menu').classList.add('hidden');
+            document.querySelector('.live').classList.remove('hidden');
             conn.send({
                 type: 'call',
                 name: document.querySelector('#name').value,
@@ -121,9 +121,9 @@ async function callUser() {
             document.querySelector('#remote-video').srcObject = stream;
         });
         call.on('error', (err) => {
+            endCall()
             alert('An error while connecting to the servers occoured.')
             console.log(err)
-            endCall()
         });
         currentCall = call;
         // save the destroyed function
