@@ -123,7 +123,7 @@ async function callUser() {
                 console.log(err);
             });
         }, 1000)
-    /} else {
+    } else {
         alert('You cannot connect to yourself.')
     }
 }
