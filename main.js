@@ -63,7 +63,7 @@ async function callUser() {
 
         //var connInt = setInterval(() => {
             if (conn.peer) {
-                clearInterval(connInt);
+                //clearInterval(connInt);
                 conn.on('open', function () {
                     document.getElementById('menu').classList.add('hidden');
                     document.querySelector('.live').classList.remove('hidden');
