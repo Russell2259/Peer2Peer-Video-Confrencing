@@ -44,11 +44,20 @@ async function callUser() {
     const peerId = prefix + document.querySelector('input').value;
     // grab the camera and mic
     if (peerId !== prefix + random) {
-        /*conn = peer.connect(peerId);
-        conn.on('error', function(err) {
-            alert(err);
-        })*/
+        stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
+            video: true,
+            audio: true,
+        }
+        );
+        // switch to the video call and play the camera preview
+        document.getElementById('menu').classList.add('hidden');
+        document.querySelector('.live').classList.remove('hidden');
+        document.getElementById('local-video').srcObject = stream;
+        document.getElementById('local-video').play();
+        // make the call
+        call = peer.call(peerId, stream);
 
+        conn = peer.connect(peerId);
         conn.on('open', function () {
             conn.send({
                 type: 'call',
@@ -98,31 +107,18 @@ async function callUser() {
             document.querySelector('.live').classList.add('hidden');
         });
 
-        setInterval(() => {
-            stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
-                video: true,
-                audio: true,
-            }
-            );
-            // switch to the video call and play the camera preview
-            document.getElementById('menu').classList.add('hidden');
-            document.querySelector('.live').classList.remove('hidden');
-            document.getElementById('local-video').srcObject = stream;
-            document.getElementById('local-video').play();
-            // make the call
-            call = peer.call(peerId, stream);
-
-            call.on('stream', (stream) => {
-                document.getElementById('remote-video').srcObject = stream;
-                document.getElementById('remote-video').play();
-            });
-            call.on('data', (stream) => {
-                document.querySelector('#remote-video').srcObject = stream;
-            });
-            call.on('error', (err) => {
-                console.log(err);
-            });
-        }, 1000)
+        call.on('stream', (stream) => {
+            document.getElementById('remote-video').srcObject = stream;
+            document.getElementById('remote-video').play();
+        });
+        call.on('data', (stream) => {
+            document.querySelector('#remote-video').srcObject = stream;
+        });
+        call.on('error', (err) => {
+            console.log(err);
+        });
+        currentCall = call;
+        // save the destroyed function
     } else {
         alert('You cannot connect to yourself.')
     }
