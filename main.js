@@ -43,11 +43,11 @@ async function callUser() {
     // get the id entered by the user
     const peerId = prefix + document.querySelector('input').value;
     // grab the camera and mic
-    //if (peerId !== prefix + random) {
-        conn = peer.connect(peerId);
+    if (peerId !== prefix + random) {
+        /*conn = peer.connect(peerId);
         conn.on('error', function(err) {
             alert(err);
-        })
+        })*/
 
         conn.on('open', function () {
             conn.send({
@@ -123,9 +123,9 @@ async function callUser() {
                 console.log(err);
             });
         }, 1000)
-    //} else {
-        //alert('You cannot connect to yourself.')
-    //}
+    /} else {
+        alert('You cannot connect to yourself.')
+    }
 }
 
 peer.on('call', (call) => onCall(call));
