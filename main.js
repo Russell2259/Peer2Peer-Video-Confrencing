@@ -3,7 +3,7 @@ const prefix = 'example_p2p_prefix-';
 const random = Math.floor(Math.random() * 1000);
 const peer = new Peer(prefix + random);
 const chatBtn = document.querySelector('.button.open_chat');
-const chat = document.querySelector('.chat');
+const chat = document.querySelector('.chat'); 
 
 async function notify(callerName) {
     await Notification.requestPermission();
