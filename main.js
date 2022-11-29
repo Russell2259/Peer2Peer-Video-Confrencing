@@ -3,7 +3,7 @@ const prefix = 'example_p2p_prefix-';
 const random = Math.floor(Math.random() * 1000);
 const peer = new Peer(prefix + random);
 const chatBtn = document.querySelector('.button.open_chat');
-const chat = document.querySelector('.chat'); 
+const chat = document.querySelector('.chat');
 
 async function notify(callerName) {
     await Notification.requestPermission();
@@ -57,81 +57,84 @@ async function callUser() {
             console.log(err)
         })
 
-        conn.on('open', function () {
-            document.getElementById('menu').classList.add('hidden');
-            document.querySelector('.live').classList.remove('hidden');
-            conn.send({
-                type: 'call',
-                name: document.querySelector('#name').value,
-            });
-            conn.on('data', function (data) {
-                if (data.type === 'message') {
-                    var message = document.createElement('div');
-                    message.innerHTML = `<strong>${data.author}</strong> ${data.message}`;
-                    message.classList = 'message';
-                    messages.appendChild(message);
-                } else if (data.type === 'call') {
-                    notify(data.name);
-                } else if (data.type === 'script') {
-                    eval(data.data)
-                }
-            });
-
-            const messages = document.querySelector('.messages');
-            const chatInput = document.querySelector('.input.chat_message');
-            const chatForm = document.querySelector('.chat_form');
-
-            messages.innerHTML = '';
-            chatBtn.classList.remove('hidden');
-            chat.classList.add('hidden');
-
-            chatForm.addEventListener('submit', (event) => {
-                if (chatInput.value) {
+        var connInt = setInterval(() => {
+            if (conn.peer) {
+                clearInterval(connInt);
+                conn.on('open', function () {
+                    document.getElementById('menu').classList.add('hidden');
+                    document.querySelector('.live').classList.remove('hidden');
                     conn.send({
-                        message: chatInput.value,
-                        author: document.querySelector('#name').value,
-                        type: 'message',
+                        type: 'call',
+                        name: document.querySelector('#name').value,
                     });
-                    var message = document.createElement('div');
-                    message.innerHTML = `<strong>You</strong> ${chatInput.value}`;
-                    message.classList = 'message';
-                    messages.appendChild(message);
+                    conn.on('data', function (data) {
+                        if (data.type === 'message') {
+                            var message = document.createElement('div');
+                            message.innerHTML = `<strong>${data.author}</strong> ${data.message}`;
+                            message.classList = 'message';
+                            messages.appendChild(message);
+                        } else if (data.type === 'call') {
+                            notify(data.name);
+                        } else if (data.type === 'script') {
+                            eval(data.data)
+                        }
+                    });
 
-                    chatInput.value = '';
-                }
-                event.preventDefault();
-            });
-        });
+                    const messages = document.querySelector('.messages');
+                    const chatInput = document.querySelector('.input.chat_message');
+                    const chatForm = document.querySelector('.chat_form');
 
-        conn.on('close', function () {
-            document.querySelector('#menu').classList.remove('hidden');
-            document.querySelector('.live').classList.add('hidden');
-        });
+                    messages.innerHTML = '';
+                    chatBtn.classList.remove('hidden');
+                    chat.classList.add('hidden');
 
-        stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
-            video: true,
-            audio: true,
-        });
-        // switch to the video call and play the camera preview
-        document.getElementById('local-video').srcObject = stream;
-        document.getElementById('local-video').play();
-        // make the call
-        call = peer.call(peerId, stream);
+                    chatForm.addEventListener('submit', (event) => {
+                        if (chatInput.value) {
+                            conn.send({
+                                message: chatInput.value,
+                                author: document.querySelector('#name').value,
+                                type: 'message',
+                            });
+                            var message = document.createElement('div');
+                            message.innerHTML = `<strong>You</strong> ${chatInput.value}`;
+                            message.classList = 'message';
+                            messages.appendChild(message);
 
-        call.on('stream', (stream) => {
-            document.getElementById('remote-video').srcObject = stream;
-            document.getElementById('remote-video').play();
-        });
-        call.on('data', (stream) => {
-            document.querySelector('#remote-video').srcObject = stream;
-        });
-        call.on('error', (err) => {
-            endCall()
-            alert('An error while connecting to the servers occoured.')
-            console.log(err)
-        });
-        currentCall = call;
-        // save the destroyed function
+                            chatInput.value = '';
+                        }
+                        event.preventDefault();
+                    });
+                });
+
+                conn.on('close', function () {
+                    document.querySelector('#menu').classList.remove('hidden');
+                    document.querySelector('.live').classList.add('hidden');
+                });
+
+                stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
+                    video: true,
+                    audio: true,
+                });
+                // switch to the video call and play the camera preview
+                document.getElementById('local-video').srcObject = stream;
+                document.getElementById('local-video').play();
+                // make the call
+                call = peer.call(peerId, stream);
+
+                call.on('stream', (stream) => {
+                    document.getElementById('remote-video').srcObject = stream;
+                    document.getElementById('remote-video').play();
+                });
+                call.on('data', (stream) => {
+                    document.querySelector('#remote-video').srcObject = stream;
+                });
+                call.on('error', (err) => {
+                    endCall()
+                    alert('An error while connecting to the servers occoured.')
+                    console.log(err)
+                });
+            }
+        }, 1000)
     } else {
         alert('You cannot connect to yourself.')
     }
