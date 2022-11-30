@@ -58,7 +58,7 @@ document.querySelector('[data-func="call_user"]').addEventListener('click', (e) 
         })
 
         var connInt = setInterval(() => {
-            if (dataConnection.open) {
+            if (peer.open) {
                 clearInterval(connInt);
                 callUser(peerId)
             } else {
