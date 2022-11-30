@@ -147,8 +147,6 @@ async function callUser(peerId) {
 }
 
 peer.on('call', (call) => {
-    const peerId = prefix + document.querySelector('input').value;
-    conn = peer.connect(peerId);
     conn.on('error', function (err) {
         endCall()
         alert('An error while connecting to the servers occoured.')
