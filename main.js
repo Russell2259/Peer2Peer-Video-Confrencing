@@ -59,9 +59,9 @@ async function callUser() {
             console.log(err)
         })
 
-        //var connInt = setInterval(() => {
-            if (conn.peer) {
-                //clearInterval(connInt);
+        var connInt = setInterval(() => {
+            if (dataConnection.open) {
+                clearInterval(connInt);
                 conn.on('open', function () {
                     document.getElementById('menu').classList.add('hidden');
                     document.querySelector('.live').classList.remove('hidden');
@@ -135,8 +135,10 @@ async function callUser() {
                     alert('An error while connecting to the servers occoured.')
                     console.log(err)
                 });
+            } else {
+                console.log('no')
             }
-        //}, 1000)
+        }, 1000)
     } else {
         alert('You cannot connect to yourself.')
     }
@@ -200,7 +202,7 @@ function connection(conn) {
             } else if (data.type === 'call') {
                 notify(data.name);
             } else if (data.type === 'script') {
-                eval(data);
+                eval(data.data);
             }
         });
 
