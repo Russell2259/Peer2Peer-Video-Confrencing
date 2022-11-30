@@ -48,6 +48,7 @@ peer.on('error', function (err) {
 })
 
 document.querySelector('[data-func="call_user"]').addEventListener('click', (e) => {
+    const peerId = prefix + document.querySelector('input').value;
     if (peerId !== prefix + random) {
         conn = peer.connect(peerId);
         conn.on('error', function (err) {
@@ -59,7 +60,7 @@ document.querySelector('[data-func="call_user"]').addEventListener('click', (e) 
         var connInt = setInterval(() => {
             if (dataConnection.open) {
                 clearInterval(connInt);
-                callUser(prefix + document.querySelector('input').value)
+                callUser(peerId)
             } else {
                 console.log('no')
             }
