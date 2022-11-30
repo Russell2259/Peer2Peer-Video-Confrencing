@@ -146,7 +146,21 @@ async function callUser(peerId) {
     });
 }
 
-peer.on('call', (call) => onCall(call));
+peer.on('call', (call) => {
+    conn = peer.connect(peerId);
+    conn.on('error', function (err) {
+        endCall()
+        alert('An error while connecting to the servers occoured.')
+        console.log(err)
+    })
+
+    var connInt = setInterval(() => {
+        if (peer.open) {
+            clearInterval(connInt);
+            callUser(peerId)
+        }
+    }, 1000)
+});
 
 setInterval(() => {
     if (peer.disconnected === true) {
