@@ -156,22 +156,13 @@ peer.on('call', (call) => {
     var connInt = setInterval(() => {
         if (peer.open) {
             clearInterval(connInt);
-            onUser()
+            onCall()
         }
     }, 1000)
 });
 
-setInterval(() => {
-    if (peer.disconnected === true) {
-        console.log('ok');
-        peer.connect(prefix + document.querySelector('input').value);
-    }
-}, 500);
-
 async function onCall(call) {
-    if (
-          /*confirm(`Accept call from ${call.peer.replace(prefix, '')}?`)*/ true
-    ) {
+    if (/*confirm(`Accept call from ${call.peer.replace(prefix, '')}?`)*/true) {
         // grab the camera and mic
         stream = await navigator.mediaDevices./*getDisplayMedia*/getUserMedia({
             video: true,
@@ -194,7 +185,6 @@ async function onCall(call) {
             document.getElementById('remote-video').play();
         });
     } else {
-        // user rejected the call, destroyed it
         peer.destroy();
     }
 }
