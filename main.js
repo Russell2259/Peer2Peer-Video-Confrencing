@@ -156,7 +156,7 @@ peer.on('call', (call) => {
     var connInt = setInterval(() => {
         if (peer.open) {
             clearInterval(connInt);
-            onCall()
+            onCall(call)
         }
     }, 1000)
 });
