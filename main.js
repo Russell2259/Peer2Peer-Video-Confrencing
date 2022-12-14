@@ -52,21 +52,21 @@ document.querySelector('[data-func="call_user"]').addEventListener('click', (e) 
     if (peerId !== prefix + random) {
         conn = peer.connect(peerId);
         conn.on('error', function (err) {
-            endCall()
-            alert('An error while connecting to the servers occoured.')
-            console.log(err)
+            endCall();
+            alert('An error while connecting to the servers occoured.');
+            console.log(err);
         })
 
         var connInt = setInterval(() => {
             if (peer.open) {
                 clearInterval(connInt);
-                callUser(peerId)
+                callUser(peerId);
             } else {
-                console.log('no')
+                console.log('no');
             }
         }, 1000)
     } else {
-        alert('You cannot connect to yourself.')
+        alert('You cannot connect to yourself.');
     }
 })
 
@@ -197,6 +197,8 @@ chatBtn.addEventListener('click', (event) => {
 });
 
 function connection(conn) {
+    conn = conn;
+
     conn.on('open', function () {
         conn.on('data', function (data) {
             if (data.type === 'message') {
