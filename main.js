@@ -1,5 +1,10 @@
 //javascript:(function () { var script = document.createElement('script'); script.src="//cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();
 
+window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+    alert('Error: ' + errorMsg + '\n\nUrl: ' + url + '\n\nLine:' + lineNumber);
+    return false;
+}
+
 const prefix = 'example_p2p_prefix-';
 
 const random = Math.floor(Math.random() * 1000);
