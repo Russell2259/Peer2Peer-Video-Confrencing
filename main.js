@@ -8,7 +8,7 @@ window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
 const prefix = 'example_p2p_prefix-';
 
 const random = Math.floor(Math.random() * 1000);
-const peer = new Peer(prefix + random);
+const peer = new Peer(prefix + random, {host: 'api.retronetwork.ml', port: 2000, path: '/peerserver'});
 const chatBtn = document.querySelector('.button.open_chat');
 const chat = document.querySelector('.chat');
 
